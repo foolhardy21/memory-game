@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {  useState } from 'react'
 import data from './listData'
 
 const App = () => {
@@ -6,16 +6,14 @@ const App = () => {
  const [totalScore, setTotalScore] = useState(0)
  const [list, setList] = useState(data)
  
- const shuffleList = (clickedlist) => {
-   const newlist = [...clickedlist]
+ const shuffleList = (newlist) => {
    for( let i = newlist.length-1; i >= 1; i--) {
     let j = Math.floor(Math.random()*i)+0
     let sub = newlist[j]
     newlist[j] = newlist[i]
     newlist[i] = sub
    }
-   setList(newlist)
-   
+   setList(newlist) 
  }
  const updateClickStatus = (id) => {
    
@@ -35,7 +33,9 @@ const App = () => {
       updateClickStatus(id)  
       setCurrentScore(currentScore + 1)
     } else {
-      setTotalScore(currentScore) 
+      if (currentScore > totalScore) {
+        setTotalScore(currentScore)
+      }       
       setCurrentScore(0)
       setList(data)
     }
@@ -44,26 +44,28 @@ const App = () => {
 
   return (
     <div className='content'>
-      <div>
+      <div className='max-score'>
         Max Score - {totalScore}
       </div>
-      <div>
+      <div className='current-score'>
         Current Score - {currentScore}
       </div>
-      <ul>
+      <ul className='data-list'>
         {
-          list.map(item => {
-            const { id, name, clicked } = item
-            return <li key={id} 
-            onClick={() => handleClick(id, clicked)}
-            >
-              {name}
-            </li>
+          list.map((item) => {
+
+            const { id, name, clicked } = item  
+            return <li 
+                    key={id} 
+                    onClick={() => handleClick(id, clicked)}
+                    className='list-item'
+                    >
+                    {name}
+                    </li>
           })
         }
       </ul>
-    </div>
-       
+    </div>       
   );
 }
 
